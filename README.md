@@ -1,0 +1,1 @@
+# dynamodb and django

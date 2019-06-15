@@ -1,0 +1,33 @@
+<style>
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid blue;
+}
+</style>
+
+{% if items %}
+<table style='border: 1px dotted blue;'>
+<tr>
+  <td>person_id</td>
+  <td>first_name last_name</td>
+  <td>source_of_wealth</td>
+  <td>location</td>
+  <td>net_worth</td>
+</tr>
+
+{% for x in items %}
+<tr>
+  <td>{{ x.person_id }} </td>
+  <td>{{ x.first_name }} {{ x.last_name }}</td>
+  <td>{{ x.source_of_wealth }}</td>
+  <td>{{ x.location }}</td>
+  <td>{{ x.net_worth }}</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+  No data found!
+{% endif %}
