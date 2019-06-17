@@ -1,1 +1,1 @@
-# dynamodb and django
+# dynamodb, angularjs and django
