@@ -13,12 +13,12 @@ aws dynamodb create-table \
 aws dynamodb put-item \
 --table-name Person $LOCAL \
 --item \
-    '{"person_id": {"S": "1001"}, "location": {"S": "Seattle, WA"}, "first_name": {"S": "Jeff"}, "last_name": {"S": "Bez"}, "net_worth": {"N": "66"}, "source_of_wealth": {"S": "Amazon.com"}}'
+    '{"person_id": {"S": "1001"}, "location": {"S": "Seattle, WA"}, "first_name": {"S": "Jef"}, "last_name": {"S": "Bez"}, "net_worth": {"N": "66"}, "source_of_wealth": {"S": "Amz"}}'
 
 aws dynamodb put-item \
 --table-name Person $LOCAL \
 --item \
-    '{"person_id": {"S": "1002"}, "location": {"S": "Omaha, NE"}, "first_name": {"S": "Wallen"}, "last_name": {"S": "Buff"}, "net_worth": {"N": "72"}, "source_of_wealth": {"S": "Berkshire"}}'
+    '{"person_id": {"S": "1002"}, "location": {"S": "Omaha, NE"}, "first_name": {"S": "Wallen"}, "last_name": {"S": "Buf"}, "net_worth": {"N": "72"}, "source_of_wealth": {"S": "Berk"}}'
 
 aws dynamodb put-item \
 --table-name Person $LOCAL \
