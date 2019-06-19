@@ -4,9 +4,9 @@ const buttonStyle = {
   border: 'height: 22px',
 };
 
-function form(items) {
+function form(items, _this) {
   return (
-    <form>
+    <form key={ 0 } >
     <p>
       {% csrf_token %}</input>
       <label>net_worth:</label> <input name="net_worth" required />
@@ -25,20 +25,9 @@ const tableStyle = {
 };
 
 function table(items, _this) {
-  return ([
-    <form>
-    <p>
-      {% csrf_token %}</input>
-      <label>net_worth:</label> <input name="net_worth" required />
-      <label>location:</label>  <input name="location" />
-      <label> </label> <button onClick={_this.handleSubmit} style={buttonStyle}>Search</button>
-    </p>
-    </form>
-    ,
-
-    
-    ( !(items && items.length) ? '' : (
-    <table style={tableStyle}>
+  if (items && items.length)
+    return (
+    <table key={ 1 } style={tableStyle}>
       <tbody>
       <tr>
         <td>person_id</td>
@@ -59,9 +48,8 @@ function table(items, _this) {
       ))}
     </tbody> 
     </table>
-    ))
-  ]);
-};
+    )  
+}
 
 class SearchForm extends React.Component {
   constructor(props) {
@@ -128,7 +116,7 @@ class SearchForm extends React.Component {
     // } else if (!isLoaded) {
     //  return <div>Loading...</div>;
     } else {
-      return table(items, this);
+      return [form(items, this), table(items, this)];
     }
   }
 }
