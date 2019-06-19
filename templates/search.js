@@ -12,27 +12,40 @@ angular.module('myApp', [], function($interpolateProvider) {
 }])
 .controller('FormController', ['$scope', '$http', function($scope, $http) {
   $scope.search = function() {
-	var req = {
-      method: 'POST',
-      url: '/search',
+    /* angular.element
+
+    Note: Keep in mind that this function will not find elements by tag name / 
+    CSS selector. For lookups by tag name, try instead angular.element(document).find(...) 
+    or $document.find(), or use the standard DOM APIs, e.g. document.querySelectorAll().
+
+    https://docs.angularjs.org/api/ng/function/angular.element
+    */
+    var formData = new FormData(angular.element(document).find('form')[0])
+    
+    // https://withintent.uncorkedstudios.com/multipart-form-data-file-upload-with-angularjs-c23bf6eeb298
+    // http://jsfiddle.net/JeJenny/ZG9re/
+    $http.post('/search', formData, {
+//      method: 'POST',
+//      url: '/search',
       headers: {
-        'Content-Type': undefined,
+         'Content-Type': undefined,
+      transformRequest: angular.identity,  
         'X-Requested-With': 'XMLHttpRequest',
-        Accept: 'application/json'
+        // Accept: 'application/json'
       },
-      params: { 
-      	net_worth: $scope.person.net_worth,
-      	location: $scope.person.location,
-      	csrfmiddlewaretoken: $scope.csrfmiddlewaretoken
-      }
-    };
-	    $http(req).then(function success(response) {
-    	$scope.items = response.data.Items;
-    	console.log($scope.items);
+//      body: formData,
+      /*params: { 
+        net_worth: $scope.person.net_worth,
+        location: $scope.person.location,
+        csrfmiddlewaretoken: $scope.csrfmiddlewaretoken
+      }*/
+    }).then(function success(response) {
+      $scope.items = response.data.Items;
+      console.log($scope.items);
     }, function error(response) {
-        $scope.status = 'Error: ' + response.statusText;
-        console.log('error: ' + $scope.status);
+      $scope.status = 'Error: ' + response.statusText;
+      console.log('error: ' + $scope.status);
     });
   };
-    
+
 }]);
