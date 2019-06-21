@@ -14,14 +14,14 @@ angular.module('myApp', [], function($interpolateProvider) {
   $scope.search = function() {
     /* angular.element
 
-    Note: Keep in mind that this function will not find elements by tag name / 
-    CSS selector. For lookups by tag name, try instead angular.element(document).find(...) 
+    Note: Keep in mind that this function will not find elements by tag name /
+    CSS selector. For lookups by tag name, try instead angular.element(document).find(...)
     or $document.find(), or use the standard DOM APIs, e.g. document.querySelectorAll().
 
     https://docs.angularjs.org/api/ng/function/angular.element
     */
-    var formData = new FormData(angular.element(document).find('form')[0])
-    
+    var formData = new FormData(document.querySelector('form'))
+
     // https://withintent.uncorkedstudios.com/multipart-form-data-file-upload-with-angularjs-c23bf6eeb298
     // http://jsfiddle.net/JeJenny/ZG9re/
     $http.post('/search', formData, {
@@ -29,12 +29,12 @@ angular.module('myApp', [], function($interpolateProvider) {
 //      url: '/search',
       headers: {
          'Content-Type': undefined,
-      transformRequest: angular.identity,  
+        transformRequest: angular.identity,
         'X-Requested-With': 'XMLHttpRequest',
         // Accept: 'application/json'
       },
 //      body: formData,
-      /*params: { 
+      /*params: {
         net_worth: $scope.person.net_worth,
         location: $scope.person.location,
         csrfmiddlewaretoken: $scope.csrfmiddlewaretoken
