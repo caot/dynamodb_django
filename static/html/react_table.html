@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Hello World</title>
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<!-- Don't use this in production: -->
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+<link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.cssx" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+<!-- CSS -->
+<link rel="stylesheet" href="https://unpkg.com/react-table@latest/react-table.css"/>
+
+<!-- JS -->
+<script src="https://unpkg.com/react-table@latest/react-table.js"></script>
+<script src="https://unpkg.com/react-table@latest/react-table.min.js"></script>
+
+<script>
+  var ReactTable = window.ReactTable.default
+</script>
+
+</head>
+
+<body>
+  <div id="root"></div>
+
+<script type="text/babel">
+
+class ListData extends React.Component {
+  render() {
+    const data = [{
+      name: 'Tanner Linsley',
+      age: 26,
+      friend: {
+        name: 'Jason Maurer',
+        age: 23,
+      }
+    },{
+      name: 'T Linsley',
+      age: 20,
+      friend: {
+        name: 'Json Maurer',
+        age: 21,
+      }
+    }]
+
+    const columns = [{
+      Header: 'Name',
+      accessor: 'name' // String-based value accessors!
+    }, {
+      Header: 'Age',
+      accessor: 'age',
+      Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+    }, {
+      id: 'friendName', // Required because our accessor is not a string
+      Header: 'Friend Name',
+      accessor: d => d.friend.name // Custom value accessors!
+    }, {
+      Header: props => <span>Friend Age</span>, // Custom header components!
+      accessor: 'friend.age'
+    }]
+
+    return <ReactTable
+      data={data}
+      columns={columns}
+    />
+  }
+
+}
+
+ReactDOM.render(<ListData />, document.getElementById('root'));
+
+</script>
+
+</body>
+
+</html>

@@ -11,8 +11,8 @@ dynamodb = boto3.resource(
 
 
 class Person(object):
-    list_display = ['id', 'first_name', 'last_name',
-                    'location', 'net_worth', 'source_of_wealth']
+    list_display = ['id', 'first_name',
+                    'last_name', 'city', 'state', 'net_worth']
 
     def __init__(self):
         try:
