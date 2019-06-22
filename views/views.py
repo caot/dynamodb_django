@@ -17,7 +17,6 @@ dynamodb = boto3.resource(
 
 '''
 http://127.0.0.1:8000/search
-http://127.0.0.1:8090/search?net_worth=66&location=Omaha,%20NE
 '''
 
 
@@ -70,11 +69,11 @@ class Search(ListView):
             expression_attribute_names['#net_worth'] = 'net_worth'
             expression_attribute_values[':net_worth'] = int(net_worth)
 
-        location = param.get('location', None)
-        if bool(location):
-            filter_expression.append('(#location = :location)')
-            expression_attribute_names['#location'] = 'location'
-            expression_attribute_values[':location'] = location
+        city = param.get('city', None)
+        if bool(city):
+            filter_expression.append('(#city = :city)')
+            expression_attribute_names['#city'] = 'city'
+            expression_attribute_values[':city'] = city
 
         context = models.Person().scan(filter_expression, expression_attribute_names,
                                        expression_attribute_values)

@@ -41,13 +41,13 @@ aws dynamodb create-table \
         ReadCapacityUnits=10,WriteCapacityUnits=5
 
   aws dynamodb put-item --table-name Person $LOCAL --item \
-      '{"id": {"S": "1001"}, "location": {"S": "Seattle, WA"}, "first_name": {"S": "Jeff"}, "last_name": {"S": "Bez"}, "net_worth": {"N": "66"}, "source_of_wealth": {"S": "Amazon.com"}}'
+      '{"id": {"S": "1001"}, "city": {"S": "Seattle"}, "state": {"S": "WA"}, "first_name": {"S": "Jeff"}, "last_name": {"S": "Bez"}, "net_worth": {"N": "66"}}'
 
   aws dynamodb put-item --table-name Person $LOCAL --item \
-      '{"id": {"S": "1002"}, "location": {"S": "Omaha, NE"}, "first_name": {"S": "Wallen"}, "last_name": {"S": "Buff"}, "net_worth": {"N": "72"}, "source_of_wealth": {"S": "Berkshire"}}'
+      '{"id": {"S": "1002"}, "city": {"S": "Omaha"}, "state": {"S": "NE"}, "first_name": {"S": "Wallen"}, "net_worth": {"N": "72"}}'
 
   aws dynamodb put-item --table-name Person $LOCAL --item \
-      '{"id": {"S": "1003"}, "location": {"S": "NYC, NY"}, "first_name": {"S": "Jack"}, "last_name": {"S": "Smith"}, "net_worth": {"N": "60"}, "source_of_wealth": {"S": "Unkown"}}'
+      '{"id": {"S": "1003"}, "city": {"S": "NYC"}, "state": {"S": "NY"}, "first_name": {"S": "Jack"}, "last_name": {"S": "Smith"}, "net_worth": {"N": "60"}}'
 
 
 # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SampleData.CreateTables.html

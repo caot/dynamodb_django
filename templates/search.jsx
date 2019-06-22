@@ -10,7 +10,7 @@ function form(items, _this) {
     <p>
       {% csrf_token %}</input>
       <label>net_worth:</label> <input name="net_worth" required />
-      <label>location:</label>  <input name="location" />
+      <label>city:</label>  <input name="city" />
       <label> </label> <button onClick={_this.handleSubmit} style={buttonStyle}>Search</button>
     </p>
     </form>
