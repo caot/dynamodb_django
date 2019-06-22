@@ -24,22 +24,22 @@ const tableStyle = {
   border: '1px dotted blue',
 };
 
-function table(items, _this) {
+function table(items, list_display, _this) {
   if (items && items.length)
     return (
     <table key={ 1 } style={tableStyle}>
       <tbody>
       {[
         <tr key={items[0].i-1}>{
-            Object.keys(items[0]).map((key, index) => (
-              <td key={index}>{key}</td>
+            Object.keys(list_display).map((index) => (
+              <td key>{list_display[index]}</td>
             ))
         }</tr>
         ,
         items.map(vals => (
         <tr key={vals.id}>{
-            Object.keys(vals).map((key, index) => (
-              <td key={index}>{vals[key]}</td>
+            Object.keys(list_display).map((index) => (
+              <td key>{vals[list_display[index]]}</td>
             ))
         }</tr>
         ))
@@ -90,7 +90,8 @@ class SearchForm extends React.Component {
       (result) => {
         this.setState({
           isLoaded: true,
-          items: result.Items
+          items: result.Items,
+          list_display: result.list_display
         });
       },
       // Note: it's important to handle errors here
@@ -106,15 +107,16 @@ class SearchForm extends React.Component {
   }
 
   render() {
-    const { error, isLoaded, items } = this.state;
+    const { error, isLoaded, items, list_display } = this.state;
     console.log(items);
+    console.log(list_display);
 
     if (error) {
       return <div>Error: {error.message}</div>;
     // } else if (!isLoaded) {
     //  return <div>Loading...</div>;
     } else {
-      return [form(items, this), table(items, this)];
+      return [form(items, this), table(items, list_display, this)];
     }
   }
 }
