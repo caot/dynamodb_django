@@ -9,7 +9,6 @@ import logging
 from django.conf import settings
 
 import models
-from astropy.logger import logging_levels
 
 dynamodb = boto3.resource(
     'dynamodb',

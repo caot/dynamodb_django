@@ -1,102 +1,38 @@
 <!DOCTYPE html>
 <html>
-<script src="https://code.angularjs.org/snapshot/angular.min.js"></script>
 <body>
-
 <head>
+<meta charset="UTF-8" />
+<title>Search</title>
+<script src="//unpkg.com/react/umd/react.development.js"></script>
+<script src="//unpkg.com/react-dom/umd/react-dom.development.js"></script>
+
+<!-- Don't use this in production: -->
+<script src="//unpkg.com/@babel/standalone/babel.min.js"></script>
+
 <style>
-table {
-  border-collapse: collapse;
-}
+  table {
+    border-collapse: collapse;
+  }
 
-table, th, td {
-  border: 1px solid blue;
-}
+  table, th, td {
+    border: 1px solid blue;
+  }
 
-p label {
-  padding-left: 15px;
-}
+  p label {
+    padding-left: 15px;
+  }
 </style>
 </head>
 
-<body ng-app="myApp">
+<body>
+<noscript>
+  You need to enable JavaScript to run this app.
+</noscript>
+<div id="root"></div>
 
-<div ng-controller="FormController"> 
-<form class="simple-form">
-  {% csrf_token %}
-
-  <p>
-  <label>net_worth:</label> <input name="net_worth" ng-model="person.net_worth" required #first="ngModel">
-  <label>location:</label>  <input name="location"  ng-model="person.location">
-  
-  <label> </label> <button ng-click="search()" ng-style="{height: '22px'}">Search</button>
-  </p>
-  
-  <p>
-  [{status}]
-  </p>
-</form>
-
-<table style='border: 1px dotted blue;' ng-if="items">
-<tr>
-  <td>person_id</td>
-  <td>first_name last_name</td>
-  <td>source_of_wealth</td>
-  <td>location</td>
-  <td>net_worth</td>
-</tr>
-
-<tr ng-repeat="x in items">
-  <td>[{ x.person_id }] </td>
-  <td>[{ x.first_name }] [{ x.last_name }]</td>
-  <td>[{ x.source_of_wealth }]</td>
-  <td>[{ x.location }]</td>
-  <td>[{ x.net_worth }]</td>
-</tr>
-</table>
-
-</div>
-
-<script>
-"use strict";
-
-angular.module('myApp', [], function($interpolateProvider) {
-  $interpolateProvider.startSymbol('[{');
-  $interpolateProvider.endSymbol('}]');
-}).config(['$httpProvider', function($httpProvider) {
-  // https://github.com/angular/angular.js/issues/1004
-  // drop X-Requested-With header from the default $http config #1004
-  // $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-  $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-  $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-}])
-.controller('FormController', ['$scope', '$http', function($scope, $http) {
-  $scope.search = function() {
-	var req = {
-      method: 'POST',
-      url: '/search',
-      headers: {
-        'Content-Type': undefined,
-        'X-Requested-With': 'XMLHttpRequest',
-        Accept: 'application/json'
-      },
-      params: { 
-      	net_worth: $scope.person.net_worth,
-      	location: $scope.person.location,
-      	csrfmiddlewaretoken: $scope.csrfmiddlewaretoken
-      }
-    };
-	    $http(req).then(function success(response) {
-    	$scope.items = response.data.Items;
-    	console.log($scope.items);
-    }, function error(response) {
-        $scope.status = 'Error: ' + response.statusText;
-        console.log('error: ' + $scope.status);
-    });
-  };
-    
-}]);
-
+<script  type="text/babel">
+{% include "search.jsx" %}
 </script>
 
 </body>
