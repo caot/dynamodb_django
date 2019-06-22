@@ -6,8 +6,8 @@ new Vue({
   delimiters: ["[{","}]"],
   data () {
     return {
-      items: this.items,
-      status: this.status
+      items: null,
+      status: null,
     };
   },
   filters: {
