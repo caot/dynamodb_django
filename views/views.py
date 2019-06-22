@@ -1,23 +1,38 @@
-from django.views.generic import ListView
+from django.views.generic import ListView as generic_ListView
 from django.http.response import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
 
-import boto3
 import json
 import logging
 
 from django.conf import settings
+# from boto.s3.bucket import Bucket
+# from boto.file.bucket import Bucket
 
 import models
+import os
 
-dynamodb = boto3.resource(
-    'dynamodb',
-    **settings.DYNAMODB
-)
 
 '''
 http://127.0.0.1:8000/search
 '''
+
+
+class ListView(generic_ListView):
+    def get_queryset(self):
+        return None
+
+
+class Html(ListView):
+    template_name = 'html.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        html = os.getcwd() + settings.STATIC_URL + 'html'
+
+        for _root, _dirs, files in os.walk(os.path.abspath(html)):
+            kwargs.update(dict(files=files))
+
+            return kwargs
 
 
 class Search(ListView):
@@ -38,9 +53,6 @@ class Search(ListView):
             return HttpResponse(json.dumps(items, cls=DjangoJSONEncoder), content_type='application/json')
 
         return super(Search, self).get(request, *args, **kwargs)
-
-    def get_queryset(self):
-        return None
 
     def get_context_data(self, *, object_list=None, **kwargs):
         if self.request.method == 'GET' and not self.request.is_ajax():

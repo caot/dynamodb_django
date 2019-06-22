@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+<head>
+<meta charset="UTF-8" />
+<title>Search</title>
+<script src="//unpkg.com/react/umd/react.development.js"></script>
+<script src="//unpkg.com/react-dom/umd/react-dom.development.js"></script>
+
+<!-- Don't use this in production: -->
+<script src="//unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+  table {
+    border-collapse: collapse;
+  }
+
+  table, th, td {
+    border: 1px solid blue;
+  }
+
+  p label {
+    padding-left: 15px;
+  }
+</style>
+</head>
+
+<body>
+<noscript>
+  You need to enable JavaScript to run this app.
+</noscript>
+<div id="root"></div>
+
+
+{% for f in files %}
+
+<div><a href='/static/html/{{ f }}'>{{ f }}</a></div>
+{% endfor %}
+
+</body>
+</html>
