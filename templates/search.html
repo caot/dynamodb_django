@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+<head>
+<meta charset="UTF-8" />
+<title>Search</title>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <style>
 table {
   border-collapse: collapse;
@@ -6,10 +15,32 @@ table {
 table, th, td {
   border: 1px solid blue;
 }
-</style>
 
-{% if items %}
-<table style='border: 1px dotted blue;'>
+p label {
+  padding-left: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div id='app'>
+<form method="post">
+  {% csrf_token %}
+
+  <p>
+  <label>net_worth:</label> <input name="net_worth" required >
+  <label>location:</label>  <input name="location" >
+
+  <label> </label> <button v-on:click.prevent="search">Search</button>
+  </p>
+
+  <p>
+  [{status}]
+  </p>
+</form>
+
+<table style='border: 1px dotted blue;' v-if='items'>
 <tr>
   <td>person_id</td>
   <td>first_name last_name</td>
@@ -18,16 +49,20 @@ table, th, td {
   <td>net_worth</td>
 </tr>
 
-{% for x in items %}
-<tr>
-  <td>{{ x.person_id }} </td>
-  <td>{{ x.first_name }} {{ x.last_name }}</td>
-  <td>{{ x.source_of_wealth }}</td>
-  <td>{{ x.location }}</td>
-  <td>{{ x.net_worth }}</td>
+<tr v-for="x in items">
+  <td>[{ x.id }] </td>
+  <td>[{ x.first_name }] [{ x.last_name }]</td>
+  <td>[{ x.source_of_wealth }]</td>
+  <td>[{ x.location }]</td>
+  <td>[{ x.net_worth }]</td>
 </tr>
-{% endfor %}
 </table>
-{% else %}
-  No data found!
-{% endif %}
+
+</div>
+
+<script>
+{% include "search.js" %}
+</script>
+
+</body>
+</html>
