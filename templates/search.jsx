@@ -29,26 +29,24 @@ function table(items, _this) {
     return (
     <table key={ 1 } style={tableStyle}>
       <tbody>
-      <tr>
-        <td>person_id</td>
-        <td>first_name last_name</td>
-        <td>source_of_wealth</td>
-        <td>location</td>
-        <td>net_worth</td>
-      </tr>
-      
-      {items.map(x => (
-      <tr key={ x.id }>
-        <td>{ x.id } </td>
-        <td>{ x.first_name } { x.last_name }</td>
-        <td>{ x.source_of_wealth }</td>
-        <td>{ x.location }</td>
-        <td>{ x.net_worth }</td>
-      </tr>
-      ))}
-    </tbody> 
+      {[
+        <tr key={items[0].i-1}>{
+            Object.keys(items[0]).map((key, index) => (
+              <td key={index}>{key}</td>
+            ))
+        }</tr>
+        ,
+        items.map(vals => (
+        <tr key={vals.id}>{
+            Object.keys(vals).map((key, index) => (
+              <td key={index}>{vals[key]}</td>
+            ))
+        }</tr>
+        ))
+      ]}
+    </tbody>
     </table>
-    )  
+    )
 }
 
 class SearchForm extends React.Component {
