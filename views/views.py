@@ -101,7 +101,7 @@ class Search(ListView):
         # self.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
         if request.is_ajax():
             items = self.get_context_data()
-
+            items.pop('view')
             return HttpResponse(json.dumps(items, cls=DjangoJSONEncoder), content_type='application/json')
 
         return super(Search, self).get(request, *args, **kwargs)
