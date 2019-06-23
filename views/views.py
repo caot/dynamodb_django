@@ -11,7 +11,7 @@ from django.conf import settings
 
 import models
 import os
-
+import time
 
 '''
 http://127.0.0.1:8000/search
@@ -35,6 +35,58 @@ class Html(ListView):
             return kwargs
 
 
+class Status(ListView):
+    def post(self, request, *args, **kwargs):
+        print('    ====> ', 'POST')
+        logging.info('POST')
+
+        return self.get(request, *args, **kwargs)
+
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         if self.request.method == 'GET' and not self.request.is_ajax():
+#             return {}
+#
+#         context = super(Search, self).get_context_data(
+#             object_list=object_list, **kwargs)
+#
+#         html = os.getcwd() + settings.STATIC_URL + 'html' + 'eact_ajax_fetch.html'
+#
+#         moddate = os.stat(html)[8]
+#
+# #         context.update(data)
+#         print('    ====> ', time.ctime(moddate))
+#
+#         return context
+
+    def get(self, request, *args, **kwargs):
+        url = request.GET.get('url', '')
+
+#         print('    ====> GET')
+
+        tokens = url.split('/static/')
+        items = {}
+        if len(tokens) == 2:
+            filename = tokens[len(tokens) - 1]
+
+            if bool(filename):
+                html = os.getcwd() + settings.STATIC_URL + filename
+
+                try:
+                    moddate = os.stat(html)[8]
+
+#                     print('    ====> ', os.stat(html))
+#                     print('    ====> ', time.timezone)
+#                     print('    ====> ', moddate)
+#                     print('    ====> ', time.ctime(moddate))
+                    items.update(
+                        dict(moddate=moddate, ctime=time.ctime(moddate)))
+                except Exception as e:
+                    items.update(dict(e=e))
+
+#         print('    ====> items = ', items)
+        return HttpResponse(json.dumps(items, cls=DjangoJSONEncoder), content_type='application/json')
+
+
 class Search(ListView):
     template_name = 'search.html'
     object_list = None
@@ -49,7 +101,7 @@ class Search(ListView):
         # self.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
         if request.is_ajax():
             items = self.get_context_data()
-            items.pop('view')
+
             return HttpResponse(json.dumps(items, cls=DjangoJSONEncoder), content_type='application/json')
 
         return super(Search, self).get(request, *args, **kwargs)
