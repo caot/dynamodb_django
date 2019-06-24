@@ -67,14 +67,7 @@ class MyComponent extends React.Component {
   }
 }
 
-function docId(id) {
-  return document.getElementById(id)
-};
-
-ReactDOM.render(
-  <MyComponent />,
-  docId('root')
-);
+ReactDOM.render(<MyComponent />, document.getElementById('root'));
 
 document.getElementById('status').innerHTML = '';
 </script>
