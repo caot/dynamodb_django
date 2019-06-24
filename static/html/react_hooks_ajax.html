@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+<script type="text/babel">
+
+function useFetch(url, defaultData) {
+    const [data, updateData] = React.useState(defaultData)
+
+    React.useEffect(() => {
+        async function fetchData() {
+        if (!url) {
+            updateData(defaultData)
+            return
+        }
+        const resp = await fetch(url, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+          }
+        }
+        )
+        const json = await resp.json()
+        updateData(json)
+    }
+    fetchData();
+} , [url]);
+
+    return data;
+}
+
+function useFetchWeather(location) {
+    const query = `http://127.0.0.1:8090/search`
+    return useFetch(location ? query : null, {})
+}
+
+function Example() {
+    const [location, setLocation] = React.useState("Cuptertino, CA");
+    const result = useFetchWeather(location);
+    console.log(result);
+
+    return (
+        <div key = {1}>
+            <input type="input" value={location} onChange={evt => setLocation(evt.target.value)} />
+            {JSON.stringify(result)}
+        </div>
+    )
+}
+
+ReactDOM.render(
+  <Example />, 
+  document.getElementById('root')
+);
+
+    </script>
+
+
+
+<div id="status"></div>
+<script type="text/babel" src="status.js"></script>
+<script type="text/babel">
+  ReactDOM.render(<Status />, document.getElementById('status'));
+</script>
+
+  </body>
+</html>

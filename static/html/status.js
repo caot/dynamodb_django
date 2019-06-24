@@ -1,68 +1,52 @@
-var moddate_default = null;
+function useFetch(url, defaultData) {
+  const [data, updateData] = React.useState(defaultData)
 
-class Status extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoaded: false,
-      moddate: null
-    };
-  }
-
-  componentDidMount() {
-    setInterval(() => {
-
-      fetch("/status?url=" + window.location, {
-          headers: {
-          // https://stackoverflow.com/questions/35192841/fetch-post-with-multipart-form-data
-          // DO NOT supply headers with 'Content-Type' if it's using FormData
-          // 'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-          // Accept: 'application/json'
-          }
-        }
-      )
-      .then(res => res.json())
-      .then(
-        (result) => {
-//            console.log(result);
-
-          this.setState({
-            isLoaded: true,
-            moddate: result.moddate
-          });
-
-          if (null === moddate_default) {
-            moddate_default = result.moddate;
-          } else if (result.moddate > moddate_default) {
-            location.reload();
-          };
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          console.log(error);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
-
-
-    }, 5000);
-  }
-
-  render() {
-    const { error, isLoaded, moddate } = this.state;
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      return (<div key={1000}>{ moddate }</div>
-      );
+  async function fetchData() {
+    if (!url) {
+      updateData(defaultData)
+      return
     }
+
+    const resp = await fetch(url, {
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      }
+    })
+
+    const json = await resp.json()
+    updateData(json)
   }
+
+  React.useEffect(() => {
+    setInterval(() => {
+      fetchData();
+    }, 5000);
+  } , [url]);
+
+  return data;
+}
+
+function useFetchStatus() {
+  // setInterval(() => {  // failed if setInterval is here
+  const url = window.location.origin + "/status?url=" + window.location;
+  const data = useFetch(url, {});
+
+  return data.moddate;
+  // }, 5000);
+}
+
+// function Example(props) {
+function Status() {
+  const [moddate_default, update] = React.useState(null)
+  const moddate = useFetchStatus();
+
+  if (!moddate_default && moddate) {
+    update(moddate);
+  } else if (moddate > moddate_default) {
+    window.location.reload();
+  };
+
+  console.log(moddate);
+
+  return (<div key={1000}>{ moddate }</div>)
 }
