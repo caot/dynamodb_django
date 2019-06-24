@@ -1,4 +1,5 @@
-function useFetch(url, defaultData) {
+// function useFetch(url, defaultData) {
+const useFetch = (url, defaultData) => {
   const [data, updateData] = React.useState(defaultData)
 
   async function fetchData() {
@@ -26,7 +27,8 @@ function useFetch(url, defaultData) {
   return data;
 }
 
-function useFetchStatus() {
+// function useFetchStatus() {
+const useFetchStatus = () => {
   // setInterval(() => {  // failed if setInterval is here
   const url = window.location.origin + "/status?url=" + window.location;
   const data = useFetch(url, {});
@@ -35,8 +37,8 @@ function useFetchStatus() {
   // }, 5000);
 }
 
-// function Example(props) {
-function Status() {
+// function Status() {
+const Status = () => {
   const [moddate_default, update] = React.useState(null)
   const moddate = useFetchStatus();
 
