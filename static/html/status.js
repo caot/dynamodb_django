@@ -1,39 +1,50 @@
-// function useFetch(url, defaultData) {
-const useFetch = (url, defaultData) => {
-  const [data, updateData] = React.useState(defaultData)
+const useHttp = (url, defaultData) => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [data, setData] = React.useState(null)
 
-  async function fetchData() {
-    if (!url) {
-      updateData(defaultData)
-      return
-    }
-
-    const resp = await fetch(url, {
+  const fetchData = () => {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+    fetch(url, {
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
       }
     })
-
-    const json = await resp.json()
-    updateData(json)
+    .then(response => {
+      console.log(response)
+      if (response.ok) {
+        const json = response.json()
+        return json;
+      } else {
+        throw new Error('Failed to fetch.');
+      }
+    })
+    .then(data => {
+      setIsLoading(false);
+      setData(data);
+    })
+    .catch(err => {
+      console.log(err);
+      setIsLoading(false);
+    });
   }
 
+  // It's important that we pass in url as the last parameter in useEffect. It
+  // ensures the fetch call is only trigged once when url changes.
   React.useEffect(() => {
     setInterval(() => {
       fetchData();
     }, 5000);
   } , [url]);
 
-  return data;
+  return [isLoading, data];
 }
 
 // function useFetchStatus() {
 const useFetchStatus = () => {
   // setInterval(() => {  // failed if setInterval is here
-  const url = window.location.origin + "/status?url=" + window.location;
-  const data = useFetch(url, {});
+  const [isLoading, data] = useHttp(window.location.origin + "/status?url=" + window.location, []);
 
-  return data.moddate;
+  return data !== null ? data.moddate : null;
   // }, 5000);
 }
 
@@ -48,7 +59,7 @@ const Status = () => {
     window.location.reload();
   };
 
-  console.log(moddate);
+  // console.log(moddate);
 
   return (<div key={1000}>{ moddate }</div>)
 }
