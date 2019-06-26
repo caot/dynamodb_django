@@ -66,7 +66,7 @@ function autoBind (context) {
   });
 }
 
-function boundMethod(objPrototype, method, descriptor) {
+const boundMethod = (objPrototype, method, descriptor) => {
   let fn = descriptor.value;
 
   return {
@@ -119,38 +119,25 @@ let data = {
   }
 }
 
-class DebugPrint extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    autoBind(this)
-    this.state = {
-      show: false,
+const DebugPrint = () => {
+  // https://stackoverflow.com/questions/30765163/pretty-printing-json-with-react
+  const [show, setShow] = React.useState(false);
+
+  return (
+    <div key={1} style={styles.root}>
+    <div style={styles.header} onClick={ ()=>{setShow(!show)} }>
+        <strong>Debug</strong>
+    </div>
+    { show 
+      ? (
+      <pre style={styles.pre}>
+       {JSON.stringify(data, null, 2) }
+      </pre>
+      )
+      : null
     }
-  }    
-
-  toggle() {
-    this.setState({
-      show: !this.state.show,
-    });
-  }
-
-  render() {
-    return (
-      <div key={1} style={styles.root}>
-        <div style={styles.header} onClick={this.toggle}>
-          <strong>Debug</strong>
-        </div>
-        {this.state.show 
-          ? (
-            <pre style={styles.pre}>
-              {JSON.stringify(this.props.data, null, 2) }
-            </pre>
-          )
-          : null
-        }
-      </div>
-    )
-  }
+    </div>
+  )
 }
 
 ReactDOM.render(
