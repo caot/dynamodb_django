@@ -5,94 +5,30 @@
     <title>Hello World</title>
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-    
-    <script src="https://github.com/JedWatson/classnames/blob/master/bind.js"></script>
 
     <!-- Don't use this in production: -->
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+.root { background-color: #1f4662; color: #fff; fontSize: 12px; }
+.header { background-color: #193549; padding: 5px 10px; fontFamily: monospace; color: #ffc600; }
+.pre { display: block; padding: 10px 30px; margin: 0; overflow: scroll; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    <script src="https://raw.githubusercontent.com/cassiozen/React-autobind/master/src/autoBind.js"></script>
+
     <script type="text/babel">
 
-let wontBind = [
-  'constructor',
-  'render',
-  'componentWillMount',
-  'componentDidMount',
-  'componentWillReceiveProps',
-  'shouldComponentUpdate',
-  'componentWillUpdate',
-  'componentDidUpdate',
-  'componentWillUnmount'
-];
-
-let toBind = [];
-
-function autoBind (context) {
-  if(context === undefined) {
-    console.error('Autobind error: No context provided.');
-    return;
-  }
-
-  const options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-  let objPrototype = Object.getPrototypeOf(context);
-
-  if(options.bindOnly) {
-    // If we want to bind *only* a set list of methods, then do that (nothing else matters)
-    toBind = options.bindOnly;
-  } else {
-    // Otherwise, bind all available methods in the class
-    toBind = Object.getOwnPropertyNames(objPrototype);
-
-    // And exclude anything explicitly passed in wontBind
-    wontBind = wontBind.concat(options.wontBind || []);
-  }
-
-  toBind.forEach(function(method) {
-    let descriptor = Object.getOwnPropertyDescriptor(objPrototype, method);
-
-    if(descriptor === undefined) {
-      console.warn(`Autobind: "${method}" method not found in class.`);
-      return;
-    }
-
-    // Return if it's special case function or if not a function at all
-    if(wontBind.indexOf(method) !== -1 || typeof descriptor.value !== 'function') {
-      return;
-    }
-
-    Object.defineProperty(objPrototype, method, boundMethod(objPrototype, method, descriptor));
-  });
-}
-
-const boundMethod = (objPrototype, method, descriptor) => {
-  let fn = descriptor.value;
-
-  return {
-    configurable: true,
-    get() {
-      if (this === objPrototype || this.hasOwnProperty(method)) {
-        return fn;
-      }
-
-      let boundFn = fn.bind(this);
-      Object.defineProperty(this, method, {
-        value: boundFn,
-        configurable: true,
-        writable: true
-      });
-      return boundFn;
-    }
-  };
-}
-
+/*
 let styles = {
   root: { backgroundColor: '#1f4662', color: '#fff', fontSize: '12px', },
   header: { backgroundColor: '#193549', padding: '5px 10px', fontFamily: 'monospace', color: '#ffc600', },
   pre: { display: 'block', padding: '10px 30px', margin: '0', overflow: 'scroll', }
 }
+*/
 
+// https://json.org/example.html
 let data = {
   "glossary": {
     "title": "example glossary",
@@ -124,13 +60,13 @@ const DebugPrint = () => {
   const [show, setShow] = React.useState(false);
 
   return (
-    <div key={1} style={styles.root}>
-    <div style={styles.header} onClick={ ()=>{setShow(!show)} }>
+    <div key={1} className='root'>
+    <div className='header' onClick={ ()=>{setShow(!show)} }>
         <strong>Debug</strong>
     </div>
     { show 
       ? (
-      <pre style={styles.pre}>
+      <pre className='pre'>
        {JSON.stringify(data, null, 2) }
       </pre>
       )
